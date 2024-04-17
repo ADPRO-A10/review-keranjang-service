@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/review")
-public class HomeController {
+public class ReviewController {
 
     @GetMapping
-    public String renderHomePage() {
-        return "Hello World";
+    public String renderReviewPage() {
+        return "Hello World Review!!";
     }
 
 }
