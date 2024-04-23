@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface Handler {
     void setNext(Handler handler);
-    void handleRequest(Map<String, Object> Request);
+    void handleRequest(Map<String, Object> request);
 }
