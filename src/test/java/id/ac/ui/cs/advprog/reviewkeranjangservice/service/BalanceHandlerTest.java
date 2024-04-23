@@ -49,6 +49,7 @@ public class BalanceHandlerTest {
         person.put("saldo", 30000);
         person.put("totalBiaya", 20000);
 
+        balanceHandler.setNext(handler);
         balanceHandler.handleRequest(person);
         assertEquals("PASSED", balanceHandler.getStatus());
         verify(handler).handleRequest(person);
