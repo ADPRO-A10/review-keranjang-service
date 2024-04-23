@@ -41,6 +41,7 @@ public class BalanceHandlerTest {
         person.put("totalBiaya", 30000);
 
         assertThrows(IllegalArgumentException.class, () -> balanceHandler.handleRequest(person));
+        assertEquals("FAILED", balanceHandler.getStatus());
     }
 
     @Test
