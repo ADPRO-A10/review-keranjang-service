@@ -30,4 +30,13 @@ public class ReviewRepository {
         return null;
     }
 
+    public boolean delete(String id) {
+        for (Review savedReview : orderData) {
+            if (savedReview.getReviewId().equals(id)) {
+                orderData.remove(savedReview);
+                return true;
+            }
+        }
+        return false;
+    }
 }
