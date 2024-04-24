@@ -81,4 +81,17 @@ class ReviewRepositoryTest {
         Review findResult = reviewRepository.findById("aduhai");
         assertNull(findResult);
     }
+
+    @Test
+    void testDelete() {
+        for (Review review : reviews) {
+            reviewRepository.save(review);
+        }
+
+        assertTrue(reviewRepository.delete(reviews.getFirst().getReviewId()));
+
+        Review findResult = reviewRepository.findById(reviews.getFirst().getReviewId());
+        assertNull(findResult);
+    }
+
 }
