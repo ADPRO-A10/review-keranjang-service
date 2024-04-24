@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class StockHandlerTest {
@@ -28,8 +29,8 @@ public class StockHandlerTest {
         produkToko2.put("id", 2);
         produkToko2.put("stok", 20);
 
-        when(stockHandler.getStock("1")).thenReturn(produkToko1.get("stok"));
-        when(stockHandler.getStock("2")).thenReturn(produkToko2.get("stok"));
+        when(stockHandler.getStock("1")).thenReturn((int) produkToko1.get("stok"));
+        when(stockHandler.getStock("2")).thenReturn((int) produkToko2.get("stok"));
     }
 
     @Test
