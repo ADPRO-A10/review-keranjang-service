@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +24,13 @@ public class StockHandlerTest {
     StockHandler stockHandler;
     @Mock
     Handler handler;
+    @Mock
+    RestTemplate restTemplate;
 
     @BeforeEach
     void setupUp() {
 
+        stockHandler = new StockHandler(restTemplate);
         stockHandler.setNext(handler);
 
         Map<String, Object> produkToko1 = new HashMap<>();
@@ -36,8 +40,11 @@ public class StockHandlerTest {
         produkToko2.put("id", 2);
         produkToko2.put("stok", 20);
 
-        when(stockHandler.getStock("1")).thenReturn((int) produkToko1.get("stok"));
-        when(stockHandler.getStock("2")).thenReturn((int) produkToko2.get("stok"));
+
+        when(restTemplate.getForObject(endsWith("1"), eq(String.class)))
+                .thenReturn("{\"stokTersedia\": " + produkToko1.get("stok") + "}");
+        when(restTemplate.getForObject(endsWith("2"), eq(String.class)))
+                .thenReturn("{\"stokTersedia\": " + produkToko2.get("stok") + "}");
     }
 
     @Test
