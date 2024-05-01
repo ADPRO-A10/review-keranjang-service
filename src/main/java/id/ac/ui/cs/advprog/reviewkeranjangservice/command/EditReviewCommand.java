@@ -2,8 +2,7 @@ package id.ac.ui.cs.advprog.reviewkeranjangservice.command;
 
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
-import org.springframework.stereotype.Service;
-@Service
+
 public class EditReviewCommand implements ReviewCommand {
     private final ReviewRepository reviewRepository;
     private final Review newReview;

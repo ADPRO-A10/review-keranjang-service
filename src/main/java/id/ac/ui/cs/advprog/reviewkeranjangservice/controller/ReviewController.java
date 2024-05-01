@@ -6,12 +6,14 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.EditReviewCommand;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.command.ReviewCommand;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
+import id.ac.ui.cs.advprog.reviewkeranjangservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,13 +21,7 @@ import java.util.Map;
 public class ReviewController {
 
     @Autowired
-    private CreateReviewCommand createReviewCommand;
-
-    @Autowired
-    private DeleteReviewCommand deleteReviewCommand;
-
-    @Autowired
-    private EditReviewCommand editReviewCommand;
+    ReviewService reviewService;
 
     @GetMapping
     public String renderReviewPage() {
@@ -37,8 +33,8 @@ public class ReviewController {
         Map<String, Object> res = new HashMap<>();
         try{
             ReviewRepository reviewRepository = new ReviewRepository();
-            CreateReviewCommand createReview = new CreateReviewCommand(review, reviewRepository);
-            createReview.execute();
+            ReviewCommand createReview = new CreateReviewCommand(review, reviewRepository);
+            reviewService.executeCommand(createReview);
 
             res.put("review", createReview);
             res.put("message", "Review Created Successfully");
@@ -56,8 +52,9 @@ public class ReviewController {
         Map<String, Object> res = new HashMap<>();
         try{
             ReviewRepository reviewRepository = new ReviewRepository();
-            DeleteReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
-            deletedReview.execute();
+            ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
+            reviewService.executeCommand(deletedReview);
+
             res.put("code", HttpStatus.OK.value());
             res.put("message", "Review Deleted Successfully");
             return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -70,12 +67,12 @@ public class ReviewController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateReview(@RequestBody Review review){
+    public ResponseEntity<?> editReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
             ReviewRepository reviewRepository = new ReviewRepository();
-            EditReviewCommand editedReview = new EditReviewCommand(reviewRepository, review);
-            editedReview.execute();
+            ReviewCommand editedReview = new EditReviewCommand(reviewRepository, review);
+            reviewService.executeCommand(editedReview);
 
             res.put("listing", editedReview);
             res.put("message", "Listing ID " + review.getReviewId() +" updated Successfully");
@@ -85,6 +82,20 @@ public class ReviewController {
             res.put("error", e.getMessage());
             res.put("message", "Something Wrong With Server");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> findAllReviews(){
+        try {
+            List<Review> reviews = reviewService.findAll();
+            return ResponseEntity.ok(reviews);
+        }catch (Exception e){
+            Map<String, Object> response = new HashMap<>();
+            response.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.put("error", e.getMessage());
+            response.put("message", "Something Wrong With Server");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
