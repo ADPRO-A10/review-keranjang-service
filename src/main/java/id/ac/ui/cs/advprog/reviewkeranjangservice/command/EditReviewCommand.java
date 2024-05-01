@@ -3,7 +3,6 @@ package id.ac.ui.cs.advprog.reviewkeranjangservice.command;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
-
 @Service
 public class EditReviewCommand implements ReviewCommand {
     private final ReviewRepository reviewRepository;
@@ -15,10 +14,11 @@ public class EditReviewCommand implements ReviewCommand {
     }
 
     @Override
-    public void execute() {
+    public Review execute() {
         Review existingReview = reviewRepository.findById(newReview.getReviewId());
         if (existingReview != null) {
             reviewRepository.save(newReview);
         }
+        return existingReview;
     }
 }

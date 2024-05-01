@@ -15,7 +15,7 @@ public class CreateReviewCommand implements ReviewCommand {
     }
 
     @Override
-    public void execute() {
-        reviewRepository.save(review);
+    public Review execute() {
+        return reviewRepository.save(review);
     }
 }

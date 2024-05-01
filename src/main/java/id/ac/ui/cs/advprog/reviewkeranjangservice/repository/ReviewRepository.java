@@ -4,27 +4,28 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Repository
 public class ReviewRepository {
-    private final List<Review> orderData = new ArrayList<>();
+    private final List<Review> reviewData = new ArrayList<>();
     public Review save (Review review) {
         int i = 0;
-        for (Review savedReview : orderData) {
+        for (Review savedReview : reviewData) {
             if (savedReview.getReviewId().equals(review.getReviewId())) {
-                orderData.remove(i);
-                orderData.add(i, review);
+                reviewData.remove(i);
+                reviewData.add(i, review);
                 return review;
             }
             i++;
         }
 
-        orderData.add(review);
+        reviewData.add(review);
         return review;
     }
     public Review findById (String id) {
-        for (Review savedReview : orderData) {
+        for (Review savedReview : reviewData) {
             if (savedReview.getReviewId().equals(id)) {
                 return savedReview;
             }
@@ -33,12 +34,16 @@ public class ReviewRepository {
     }
 
     public boolean delete(String id) {
-        for (Review savedReview : orderData) {
+        for (Review savedReview : reviewData) {
             if (savedReview.getReviewId().equals(id)) {
-                orderData.remove(savedReview);
+                reviewData.remove(savedReview);
                 return true;
             }
         }
         return false;
+    }
+
+    public Iterator<Review> findAll(){
+        return reviewData.iterator();
     }
 }

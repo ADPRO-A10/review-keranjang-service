@@ -15,7 +15,11 @@ public class DeleteReviewCommand implements ReviewCommand {
     }
 
     @Override
-    public void execute() {
-        reviewRepository.delete(reviewId);
+    public Review execute() {
+        Review review = reviewRepository.findById(reviewId);
+        if (review != null) {
+            reviewRepository.delete(review.getReviewId());
+        }
+        return review;
     }
 }
