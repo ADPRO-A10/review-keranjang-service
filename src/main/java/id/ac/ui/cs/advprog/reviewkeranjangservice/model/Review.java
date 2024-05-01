@@ -2,6 +2,8 @@ package id.ac.ui.cs.advprog.reviewkeranjangservice.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
 @Getter
