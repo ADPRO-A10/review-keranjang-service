@@ -18,12 +18,15 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public Review executeCommand(ReviewCommand command) {
-        return null;
+        return command.execute();
     }
 
     @Override
     public List<Review> findAll() {
-        return null;
+        Iterator<Review> productIterator = reviewRepository.findAll();
+        List<Review> allProduct = new ArrayList<>();
+        productIterator.forEachRemaining(allProduct::add);
+        return allProduct;
     }
 
 }
