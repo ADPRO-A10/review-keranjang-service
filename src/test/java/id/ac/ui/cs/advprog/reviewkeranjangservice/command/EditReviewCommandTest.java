@@ -7,12 +7,16 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.EditReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 class EditReviewCommandTest {
 
     @Mock
@@ -30,7 +34,8 @@ class EditReviewCommandTest {
     @Test
     void testEdit() {
         Review reviewToEdit = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
-        reviewRepository.save(reviewToEdit);
+        Mockito.when(reviewRepository.save(reviewToEdit)).thenReturn(reviewToEdit);
+        Mockito.when(reviewRepository.findById(reviewToEdit.getReviewId())).thenReturn(Optional.of(reviewToEdit));
 
         reviewToEdit.setRating(5);
         EditReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, reviewToEdit);

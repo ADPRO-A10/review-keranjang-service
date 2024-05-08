@@ -7,14 +7,18 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.CreateReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(MockitoExtension.class)
 class CreateReviewCommandTest {
 
     @Mock
@@ -32,13 +36,9 @@ class CreateReviewCommandTest {
     @Test
     void testExecuteCreate() {
         Review review = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
+        Mockito.when(reviewRepository.save(review)).thenReturn(review);
         CreateReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
-        createReviewCommand.execute();
-
-        Optional<Review> savedReview = reviewRepository.findById(review.getReviewId());
-        assertNotNull(savedReview);
-        assertEquals(review.getReviewerName(), savedReview.get().getReviewerName());
-        assertEquals(review.getReviewText(), savedReview.get().getReviewText());
-        assertEquals(review.getRating(), savedReview.get().getRating());
+        Optional<Review> result = createReviewCommand.execute();
+        assertEquals(review, result.get());
     }
 }

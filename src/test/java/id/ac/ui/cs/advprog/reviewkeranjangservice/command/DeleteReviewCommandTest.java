@@ -7,13 +7,16 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.DeleteReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(MockitoExtension.class)
 class DeleteReviewCommandTest {
 
     @Mock
@@ -31,8 +34,6 @@ class DeleteReviewCommandTest {
     @Test
     void testDelete() {
         Review reviewToDelete = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
-        Mockito.when(reviewRepository.save(reviewToDelete)).thenReturn(reviewToDelete);
-        Mockito.when(reviewRepository.findById(reviewToDelete.getReviewId())).thenReturn(Optional.empty());
 
         DeleteReviewCommand deleteReviewCommand = new DeleteReviewCommand(reviewToDelete.getReviewId(), reviewRepository);
         deleteReviewCommand.execute();
@@ -40,5 +41,4 @@ class DeleteReviewCommandTest {
         Optional<Review> deletedReview = reviewRepository.findById(reviewToDelete.getReviewId());
         assertFalse(deletedReview.isPresent());
     }
-
 }
