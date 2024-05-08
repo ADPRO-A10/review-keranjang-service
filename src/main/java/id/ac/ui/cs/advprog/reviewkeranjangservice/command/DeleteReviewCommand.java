@@ -3,6 +3,8 @@ package id.ac.ui.cs.advprog.reviewkeranjangservice.command;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
 
+import java.util.Optional;
+
 
 public class DeleteReviewCommand implements ReviewCommand {
     private final String reviewId;
@@ -14,11 +16,9 @@ public class DeleteReviewCommand implements ReviewCommand {
     }
 
     @Override
-    public Review execute() {
-        Review review = reviewRepository.findById(reviewId);
-        if (review != null) {
-            reviewRepository.delete(review.getReviewId());
-        }
+    public Optional<Review> execute() {
+        Optional<Review> review = reviewRepository.findById(reviewId);
+        review.ifPresent(value -> reviewRepository.deleteById(String.valueOf(value)));
         return review;
     }
 }

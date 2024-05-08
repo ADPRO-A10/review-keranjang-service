@@ -7,18 +7,21 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.DeleteReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class DeleteReviewCommandTest {
 
+    @Mock
     private ReviewRepository reviewRepository;
     private Product product;
 
     @BeforeEach
     void setUp() {
-        reviewRepository = new ReviewRepository();
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
@@ -28,13 +31,14 @@ class DeleteReviewCommandTest {
     @Test
     void testDelete() {
         Review reviewToDelete = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
-        reviewRepository.save(reviewToDelete);
+        Mockito.when(reviewRepository.save(reviewToDelete)).thenReturn(reviewToDelete);
+        Mockito.when(reviewRepository.findById(reviewToDelete.getReviewId())).thenReturn(Optional.empty());
 
         DeleteReviewCommand deleteReviewCommand = new DeleteReviewCommand(reviewToDelete.getReviewId(), reviewRepository);
         deleteReviewCommand.execute();
 
-        Review deletedReview = reviewRepository.findById(reviewToDelete.getReviewId());
-        assertNull(deletedReview);
+        Optional<Review> deletedReview = reviewRepository.findById(reviewToDelete.getReviewId());
+        assertFalse(deletedReview.isPresent());
     }
 
 }

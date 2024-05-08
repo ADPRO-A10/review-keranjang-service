@@ -1,14 +1,20 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.model;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 public class Review {
+    @Id
     String ReviewId;
     Product product;
     String reviewerName;

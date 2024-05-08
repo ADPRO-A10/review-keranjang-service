@@ -7,17 +7,20 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.EditReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EditReviewCommandTest {
 
+    @Mock
     private ReviewRepository reviewRepository;
     private Product product;
 
     @BeforeEach
     void setUp() {
-        reviewRepository = new ReviewRepository();
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
@@ -33,7 +36,7 @@ class EditReviewCommandTest {
         EditReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, reviewToEdit);
         editReviewCommand.execute();
 
-        Review updatedReview = reviewRepository.findById(reviewToEdit.getReviewId());
-        assertEquals(5, updatedReview.getRating());
+        Optional<Review> updatedReview = reviewRepository.findById(reviewToEdit.getReviewId());
+        assertEquals(5, updatedReview.get().getRating());
     }
 }

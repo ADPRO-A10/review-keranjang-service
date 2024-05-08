@@ -7,18 +7,22 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.CreateReviewCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CreateReviewCommandTest {
 
+    @Mock
     private ReviewRepository reviewRepository;
     private Product product;
 
     @BeforeEach
     void setUp() {
-        reviewRepository = new ReviewRepository();
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
@@ -31,10 +35,10 @@ class CreateReviewCommandTest {
         CreateReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
         createReviewCommand.execute();
 
-        Review savedReview = reviewRepository.findById(review.getReviewId());
+        Optional<Review> savedReview = reviewRepository.findById(review.getReviewId());
         assertNotNull(savedReview);
-        assertEquals(review.getReviewerName(), savedReview.getReviewerName());
-        assertEquals(review.getReviewText(), savedReview.getReviewText());
-        assertEquals(review.getRating(), savedReview.getRating());
+        assertEquals(review.getReviewerName(), savedReview.get().getReviewerName());
+        assertEquals(review.getReviewText(), savedReview.get().getReviewText());
+        assertEquals(review.getRating(), savedReview.get().getRating());
     }
 }

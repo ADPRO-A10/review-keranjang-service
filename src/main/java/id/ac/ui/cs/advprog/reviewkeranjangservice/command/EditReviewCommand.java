@@ -3,6 +3,8 @@ package id.ac.ui.cs.advprog.reviewkeranjangservice.command;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
 
+import java.util.Optional;
+
 public class EditReviewCommand implements ReviewCommand {
     private final ReviewRepository reviewRepository;
     private final Review newReview;
@@ -13,9 +15,9 @@ public class EditReviewCommand implements ReviewCommand {
     }
 
     @Override
-    public Review execute() {
-        Review existingReview = reviewRepository.findById(newReview.getReviewId());
-        if (existingReview != null) {
+    public Optional<Review> execute() {
+        Optional<Review> existingReview = reviewRepository.findById(newReview.getReviewId());
+        if (existingReview.isPresent()) {
             reviewRepository.save(newReview);
         }
         return existingReview;

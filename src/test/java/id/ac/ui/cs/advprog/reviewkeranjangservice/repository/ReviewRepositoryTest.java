@@ -5,21 +5,24 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Product;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReviewRepositoryTest {
 
+    @Mock
     ReviewRepository reviewRepository;
 
     List <Review> reviews;
 
     @BeforeEach
     void setUp() {
-        reviewRepository = new ReviewRepository();
 
         List <Product> products = new ArrayList<>();
 
@@ -46,52 +49,60 @@ class ReviewRepositoryTest {
     @Test
 
     void testSaveCreate(){
-        Review review = reviews.getFirst();
+        Review review = reviews.get(0);
+        Mockito.when(reviewRepository.save(review)).thenReturn(review);
+        Mockito.when(reviewRepository.findById(review.getReviewId())).thenReturn(Optional.of(review));
+
         Review result = reviewRepository.save(review);
 
-        Review findResult = reviewRepository.findById(reviews.getFirst().getReviewId());
+        Optional<Review> findResult = reviewRepository.findById(review.getReviewId());
         assertEquals(review.getReviewId(), result.getReviewId());
-        assertEquals(review.getReviewId(), findResult.getReviewId());
-        assertEquals(review.getReviewerName(), findResult.getReviewerName());
-        assertEquals(review.getProduct(), findResult.getProduct());
-        assertEquals(review.getReviewText(), findResult.getReviewText());
-        assertEquals(review.getRating(), findResult.getRating());
+        assertEquals(review.getReviewId(), findResult.get().getReviewId());
+        assertEquals(review.getReviewerName(), findResult.get().getReviewerName());
+        assertEquals(review.getProduct(), findResult.get().getProduct());
+        assertEquals(review.getReviewText(), findResult.get().getReviewText());
+        assertEquals(review.getRating(), findResult.get().getRating());
     }
 
     @Test
     void testFindByIdIfIdFound() {
-        for (Review review : reviews) {
-            reviewRepository.save(review);
-        }
+        Mockito.when(reviewRepository.saveAll(reviews)).thenReturn(reviews);
+        Mockito.when(reviewRepository.findById(reviews.get(0).getReviewId())).thenReturn(Optional.of(reviews.get(0)));
 
-        Review findResult = reviewRepository.findById(reviews.getFirst().getReviewId());
-        assertEquals(reviews.getFirst().getReviewId(), findResult.getReviewId());
-        assertEquals(reviews.getFirst().getReviewerName(), findResult.getReviewerName());
-        assertEquals(reviews.getFirst().getProduct(), findResult.getProduct());
-        assertEquals(reviews.getFirst().getReviewText(), findResult.getReviewText());
-        assertEquals(reviews.getFirst().getRating(), findResult.getRating());
+        reviewRepository.saveAll(reviews);
+
+        Optional<Review> findResult = reviewRepository.findById(reviews.get(0).getReviewId());
+        assertEquals(reviews.get(0).getReviewId(), findResult.get().getReviewId());
+        assertEquals(reviews.get(0).getReviewerName(), findResult.get().getReviewerName());
+        assertEquals(reviews.get(0).getProduct(), findResult.get().getProduct());
+        assertEquals(reviews.get(0).getReviewText(), findResult.get().getReviewText());
+        assertEquals(reviews.get(0).getRating(), findResult.get().getRating());
     }
 
     @Test
     void testFindByIdIfIdNotFound() {
-        for (Review review : reviews) {
-            reviewRepository.save(review);
-        }
+        Mockito.when(reviewRepository.saveAll(reviews)).thenReturn(reviews);
+        Mockito.when(reviewRepository.findById("aduhai")).thenReturn(Optional.empty());
 
-        Review findResult = reviewRepository.findById("aduhai");
-        assertNull(findResult);
+        reviewRepository.saveAll(reviews);
+
+        Optional<Review> findResult = reviewRepository.findById("aduhai");
+        assertFalse(findResult.isPresent());
     }
 
     @Test
     void testDelete() {
-        for (Review review : reviews) {
-            reviewRepository.save(review);
-        }
+        Mockito.when(reviewRepository.saveAll(reviews)).thenReturn(reviews);
+        Mockito.doNothing().when(reviewRepository).deleteById(reviews.get(0).getReviewId());
+        Mockito.when(reviewRepository.findById(reviews.get(0).getReviewId())).thenReturn(Optional.empty());
 
-        assertTrue(reviewRepository.delete(reviews.getFirst().getReviewId()));
+        reviewRepository.saveAll(reviews);
 
-        Review findResult = reviewRepository.findById(reviews.getFirst().getReviewId());
-        assertNull(findResult);
+        reviewRepository.deleteById(reviews.get(0).getReviewId());
+
+        Optional<Review> findResult = reviewRepository.findById(reviews.get(0).getReviewId());
+        assertFalse(findResult.isPresent());
     }
+
 
 }

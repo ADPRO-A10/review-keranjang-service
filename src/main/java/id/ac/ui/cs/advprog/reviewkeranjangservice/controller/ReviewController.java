@@ -23,6 +23,9 @@ public class ReviewController {
     @Autowired
     ReviewService reviewService;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     @GetMapping
     public String renderReviewPage() {
         return "Hello World Review!!";
@@ -32,7 +35,6 @@ public class ReviewController {
     public ResponseEntity<?> createReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
-            ReviewRepository reviewRepository = new ReviewRepository();
             ReviewCommand createReview = new CreateReviewCommand(review, reviewRepository);
             reviewService.executeCommand(createReview);
 
@@ -51,7 +53,6 @@ public class ReviewController {
     public ResponseEntity<?> deleteReview(@PathVariable("reviewId") String id){
         Map<String, Object> res = new HashMap<>();
         try{
-            ReviewRepository reviewRepository = new ReviewRepository();
             ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
             reviewService.executeCommand(deletedReview);
 
@@ -70,7 +71,6 @@ public class ReviewController {
     public ResponseEntity<?> editReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
-            ReviewRepository reviewRepository = new ReviewRepository();
             ReviewCommand editedReview = new EditReviewCommand(reviewRepository, review);
             reviewService.executeCommand(editedReview);
 

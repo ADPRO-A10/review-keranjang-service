@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +22,6 @@ class ReviewServiceImplTest {
     @Mock
     ReviewRepository reviewRepository;
 
-
     @InjectMocks
     ReviewServiceImpl reviewService;
 
@@ -29,7 +29,6 @@ class ReviewServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        reviewRepository = new ReviewRepository();
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
@@ -39,17 +38,17 @@ class ReviewServiceImplTest {
     @Test
     void testExecuteCommand() {
         Review review = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
-        ReviewCommand command = () -> review;
+        ReviewCommand command = () -> java.util.Optional.of(review);
 
-        Review result = reviewService.executeCommand(command);
+        Optional<Review> result = reviewService.executeCommand(command);
 
-        assertEquals(review, result);
+        assertEquals(review, result.get());
     }
 
     @Test
     void testFindAllIfEmpty() {
         List<Review> reviewList = new ArrayList<>();
-        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList.iterator());
+        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList);
 
         List<Review> products = reviewService.findAll();
 
@@ -64,7 +63,7 @@ class ReviewServiceImplTest {
         reviewList.add(review1);
         reviewList.add(review2);
 
-        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList.iterator());
+        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList);
 
         List<Review> reviews = reviewService.findAll();
 

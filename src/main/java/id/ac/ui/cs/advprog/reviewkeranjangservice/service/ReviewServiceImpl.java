@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -17,15 +18,15 @@ public class ReviewServiceImpl implements ReviewService{
     private ReviewRepository reviewRepository;
 
     @Override
-    public Review executeCommand(ReviewCommand command) {
+    public Optional<Review> executeCommand(ReviewCommand command) {
         return command.execute();
     }
 
     @Override
     public List<Review> findAll() {
-        Iterator<Review> productIterator = reviewRepository.findAll();
+        Iterable<Review> productIterator = reviewRepository.findAll();
         List<Review> allProduct = new ArrayList<>();
-        productIterator.forEachRemaining(allProduct::add);
+        productIterator.forEach(allProduct::add);
         return allProduct;
     }
 
