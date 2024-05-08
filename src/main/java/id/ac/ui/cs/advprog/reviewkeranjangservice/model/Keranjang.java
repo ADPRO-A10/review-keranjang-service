@@ -1,17 +1,23 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.model;
 
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Map;
 
 import java.util.UUID;
 
 @Getter @Setter
+@Entity
 public class Keranjang {
+    @Id
     private String id;
-    private List<Map<String, Object>> listProduk;
+
+    @ElementCollection
+    private Map<String, String> listProduk;
 
     public void setId(String id) {
         if (!isValidUUID(id)) {
