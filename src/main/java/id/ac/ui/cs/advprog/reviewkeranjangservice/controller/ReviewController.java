@@ -85,7 +85,7 @@ public class ReviewController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/findAllReviews")
     public ResponseEntity<?> findAllReviews(){
         try {
             List<Review> reviews = reviewService.findAll();
