@@ -32,7 +32,23 @@ public class KeranjangController {
 
     @PostMapping
     public ResponseEntity<String> createKeranjang() throws JsonProcessingException {
-        return null;
+        Keranjang keranjang = new Keranjang();
+        keranjang.setId(UUID.randomUUID().toString());
+        Map<String, String> listProduk = new HashMap<>();
+        keranjang.setListProduk(listProduk);
+
+        Keranjang result = keranjangService.createKeranjang(keranjang);
+        JSONObject response = new JSONObject();
+
+        if (result == null) {
+            response.put("message", "Keranjang gagal dibuat");
+            return ResponseEntity.badRequest().body(response.toString());
+        }
+
+        String data = objectMapper.writeValueAsString(keranjang);
+        response.put("message", "Keranjang berhasil dibuat");
+        response.put("data", data);
+        return ResponseEntity.ok(response.toString());
     }
 
 }
