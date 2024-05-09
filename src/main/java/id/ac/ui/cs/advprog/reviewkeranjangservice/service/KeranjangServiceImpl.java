@@ -14,16 +14,32 @@ public class KeranjangServiceImpl implements KeranjangService{
     private KeranjangRepository keranjangRepository;
     @Override
     public Keranjang createKeranjang(Keranjang keranjang) {
+        Optional<Keranjang> result = keranjangRepository.findById(keranjang.getId());
+
+        if (result.isEmpty()) {
+            keranjangRepository.save(keranjang);
+            return keranjang;
+        }
+
         return null;
     }
 
     @Override
     public Keranjang updateKeranjang(String keranjangId, Keranjang keranjang) {
-        return null;
+        Optional<Keranjang> result = keranjangRepository.findById(keranjangId);
+
+        if (result.isPresent()) {
+            keranjangRepository.save(keranjang);
+            return keranjang;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public Keranjang findById(String keranjangId) {
-        return null;
+        Optional<Keranjang> result = keranjangRepository.findById(keranjangId);
+
+        return result.orElse(null);
     }
 }
