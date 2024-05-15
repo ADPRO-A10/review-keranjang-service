@@ -4,10 +4,12 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.ReviewCommand;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,12 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    private final RestTemplate restTemplate;
+
+    public ReviewServiceImpl(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
     @Override
     public Optional<Review> executeCommand(ReviewCommand command) {
@@ -30,4 +38,8 @@ public class ReviewServiceImpl implements ReviewService{
         return allProduct;
     }
 
+    @Override
+    public Review getReviewByProduct(String productId) {
+        return null;
+    }
 }
