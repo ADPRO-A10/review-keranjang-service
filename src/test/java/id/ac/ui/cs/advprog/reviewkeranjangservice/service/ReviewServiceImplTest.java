@@ -12,26 +12,37 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceImplTest {
 
+    @InjectMocks
+    ReviewServiceImpl reviewService;
+
     @Mock
     ReviewRepository reviewRepository;
 
-    @InjectMocks
-    ReviewServiceImpl reviewService;
+    @Mock
+    private RestTemplateBuilder restTemplateBuilder;
+
+    @Mock
+    private RestTemplate restTemplate;
 
     private Product product;
 
     @BeforeEach
     void setUp() {
+        when(restTemplateBuilder.build()).thenReturn(restTemplate);
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
@@ -51,7 +62,7 @@ class ReviewServiceImplTest {
     @Test
     void testFindAllIfEmpty() {
         List<Review> reviewList = new ArrayList<>();
-        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList);
+        when(reviewRepository.findAll()).thenReturn(reviewList);
 
         List<Review> products = reviewService.findAll();
 
@@ -66,7 +77,7 @@ class ReviewServiceImplTest {
         reviewList.add(review1);
         reviewList.add(review2);
 
-        Mockito.when(reviewRepository.findAll()).thenReturn(reviewList);
+        when(reviewRepository.findAll()).thenReturn(reviewList);
 
         List<Review> reviews = reviewService.findAll();
 
@@ -74,5 +85,18 @@ class ReviewServiceImplTest {
         assertEquals(2, reviews.size());
         assertTrue(reviews.contains(review1));
         assertTrue(reviews.contains(review2));
+    }
+
+    @Test
+    public void testGetReviewByProduct() {
+        String productId = product.getProductId();
+        Review expectedReview = new Review(product, "John Doe", "Great product!", 5);
+
+        when(restTemplate.getForEntity("http://34.143.169.251/reviews/" + productId, Review.class))
+                .thenReturn(ResponseEntity.ok(expectedReview));
+
+        Review actualReview = reviewService.getReviewByProduct(productId);
+
+        assertEquals(expectedReview, actualReview);
     }
 }
