@@ -25,18 +25,6 @@ public class KeranjangServiceImpl implements KeranjangService{
     }
 
     @Override
-    public Keranjang updateKeranjang(String keranjangId, Keranjang keranjang) {
-        Optional<Keranjang> result = keranjangRepository.findById(keranjangId);
-
-        if (result.isPresent()) {
-            keranjangRepository.save(keranjang);
-            return keranjang;
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
     public Keranjang findById(String keranjangId) {
         Optional<Keranjang> result = keranjangRepository.findById(keranjangId);
 

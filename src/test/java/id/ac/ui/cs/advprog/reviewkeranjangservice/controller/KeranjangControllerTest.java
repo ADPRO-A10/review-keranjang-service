@@ -41,9 +41,6 @@ public class KeranjangControllerTest {
     @Test
     void testCreateKeranjang() throws Exception {
         Keranjang keranjang = new Keranjang();
-        keranjang.setId(UUID.randomUUID().toString());
-        Map<String, String> listProduk = new HashMap<>();
-        keranjang.setListProduk(listProduk);
 
         doReturn(keranjang).when(keranjangService).createKeranjang(any(Keranjang.class));
 
