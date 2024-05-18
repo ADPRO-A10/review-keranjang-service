@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class KeranjangServiceImpl implements KeranjangService{
@@ -25,7 +26,7 @@ public class KeranjangServiceImpl implements KeranjangService{
     }
 
     @Override
-    public Keranjang findById(String keranjangId) {
+    public Keranjang findById(UUID keranjangId) {
         Optional<Keranjang> result = keranjangRepository.findById(keranjangId);
 
         return result.orElse(null);

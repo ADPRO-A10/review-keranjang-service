@@ -6,6 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface KeranjangRepository extends CrudRepository<Keranjang, String> {
-    Optional<Keranjang> findById(UUID id);
+public interface KeranjangRepository extends CrudRepository<Keranjang, UUID> {
 }
