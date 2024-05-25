@@ -18,8 +18,13 @@ public class EditReviewCommand implements ReviewCommand {
     public Optional<Review> execute() {
         Optional<Review> existingReview = reviewRepository.findById(newReview.getReviewId());
         if (existingReview.isPresent()) {
-            reviewRepository.save(newReview);
+            Review reviewToUpdate = existingReview.get();
+            reviewToUpdate.setReviewerName(newReview.getReviewerName());
+            reviewToUpdate.setReviewText(newReview.getReviewText());
+            reviewToUpdate.setRating(newReview.getRating());
+            reviewRepository.save(reviewToUpdate);
         }
         return existingReview;
     }
+
 }

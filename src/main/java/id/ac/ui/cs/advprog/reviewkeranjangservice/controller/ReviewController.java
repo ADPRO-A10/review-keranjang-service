@@ -72,12 +72,18 @@ public class ReviewController {
     public ResponseEntity<?> editReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
-            ReviewCommand editedReview = new EditReviewCommand(reviewRepository, review);
-            reviewService.executeCommand(editedReview);
+            ReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, review);
+            Optional<Review> editedReview = reviewService.executeCommand(editReviewCommand);
 
-            res.put("listing", editedReview);
-            res.put("message", "Listing ID " + review.getReviewId() +" updated Successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+            if (editedReview.isPresent()) {
+                res.put("listing", editedReview.get());
+                res.put("message", "Review ID " + review.getReviewId() +" updated Successfully");
+                return ResponseEntity.status(HttpStatus.CREATED).body(res);
+            } else {
+                res.put("code", HttpStatus.NOT_FOUND.value());
+                res.put("message", "Review not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+            }
         }catch (Exception e){
             res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
             res.put("error", e.getMessage());
