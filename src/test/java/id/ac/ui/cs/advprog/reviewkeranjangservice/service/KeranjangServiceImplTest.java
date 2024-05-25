@@ -47,16 +47,6 @@ public class KeranjangServiceImplTest {
     }
 
     @Test
-    void testCreateKeranjangIfAlreadyExists() {
-        Keranjang keranjang1 = keranjangList.getFirst();
-        doReturn(Optional.of(keranjang1)).when(keranjangRepository).findById(keranjang1.getId());
-
-        assertNull(keranjangService.createKeranjang(keranjang1));
-        verify(keranjangRepository, times(0)).save(keranjang1);
-    }
-
-
-    @Test
     void testFindByIdIfIdFound() {
         Keranjang keranjang = keranjangList.get(1);
         doReturn(Optional.of(keranjang)).when(keranjangRepository).findById(keranjang.getId());

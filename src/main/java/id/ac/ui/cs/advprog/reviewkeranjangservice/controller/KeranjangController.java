@@ -1,25 +1,18 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItemKey;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Keranjang;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.service.KeranjangService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/")
 public class KeranjangController {
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     KeranjangService keranjangService;
@@ -30,21 +23,11 @@ public class KeranjangController {
     }
 
     @PostMapping("api/keranjang")
-    public ResponseEntity<String> createKeranjang() throws JsonProcessingException {
+    public ResponseEntity<Keranjang> createKeranjang() {
         Keranjang keranjang = new Keranjang();
 
         Keranjang result = keranjangService.createKeranjang(keranjang);
-        JSONObject response = new JSONObject();
-
-        if (result == null) {
-            response.put("message", "Keranjang gagal dibuat");
-            return ResponseEntity.badRequest().body(response.toString());
-        }
-
-        String data = objectMapper.writeValueAsString(keranjang);
-        response.put("message", "Keranjang berhasil dibuat");
-        response.put("data", data);
-        return ResponseEntity.ok(response.toString());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("api/keranjang/{keranjangId}")
@@ -53,13 +36,8 @@ public class KeranjangController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("api/itemcart/")
-    public ResponseEntity<CartItem> addCartItemToCart(@RequestBody Map<String, String> request) {
-        String keranjangId = request.get("keranjangId");
-        String itemId = request.get("itemId");
-        String jumlah = request.get("jumlah");
-        String harga = request.get("harga");
-        String nama = request.get("nama");
+    @PostMapping("api/itemcart")
+    public ResponseEntity<CartItem> addCartItemToCart(@RequestParam String keranjangId, @RequestParam String itemId, @RequestParam String jumlah, @RequestParam String harga, @RequestParam String nama) {
 
         CartItemKey cartItemKey = new CartItemKey();
         cartItemKey.setCartId(UUID.fromString(keranjangId));

@@ -23,13 +23,7 @@ public class KeranjangServiceImpl implements KeranjangService{
     StockHandler stockHandler = new StockHandler(restTemplate);
     @Override
     public Keranjang createKeranjang(Keranjang keranjang) {
-        Optional<Keranjang> result = keranjangRepository.findById(keranjang.getId());
-
-        if (result.isEmpty()) {
-            return keranjangRepository.save(keranjang);
-        }
-
-        return null;
+        return keranjangRepository.save(keranjang);
     }
 
     @Override
