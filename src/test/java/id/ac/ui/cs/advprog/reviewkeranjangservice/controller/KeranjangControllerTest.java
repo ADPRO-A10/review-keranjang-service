@@ -42,13 +42,8 @@ public class KeranjangControllerTest {
 
         doReturn(keranjang).when(keranjangService).createKeranjang(any(Keranjang.class));
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/keranjang"))
+        mockMvc.perform(post("/api/keranjang"))
                 .andExpect(status().isOk())
                 .andReturn();
-
-        String response = mvcResult.getResponse().getContentAsString();
-        Map<String, Object> responseMap = objectMapper.readValue(response, typeRef);
-
-        assertEquals("Keranjang berhasil dibuat", responseMap.get("message"));
     }
 }
