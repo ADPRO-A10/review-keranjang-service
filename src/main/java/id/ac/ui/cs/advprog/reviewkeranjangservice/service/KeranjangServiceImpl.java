@@ -26,8 +26,7 @@ public class KeranjangServiceImpl implements KeranjangService{
         Optional<Keranjang> result = keranjangRepository.findById(keranjang.getId());
 
         if (result.isEmpty()) {
-            keranjangRepository.save(keranjang);
-            return keranjang;
+            return keranjangRepository.save(keranjang);
         }
 
         return null;
@@ -46,5 +45,24 @@ public class KeranjangServiceImpl implements KeranjangService{
 
         Iterable<CartItem> cartItems = cartItemRepository.findAllById_CartId(keranjangId);
         stockHandler.handleRequest(cartItems);
+    }
+
+    @Override
+    public Iterable<CartItem> findAllCartItems(UUID keranjangId) {
+        return cartItemRepository.findAllById_CartId(keranjangId);
+    }
+
+    @Override
+    public CartItem createCartItem(CartItem cartItem) {
+        return cartItemRepository.save(cartItem);
+    }
+
+    @Override
+    public void deleteCartItem(UUID keranjangId, UUID itemId) {
+        CartItem cartItem = cartItemRepository.findById_CartIdAndId_ItemId(keranjangId, itemId);
+
+        if (cartItem != null) {
+            cartItemRepository.delete(cartItem);
+        }
     }
 }

@@ -42,7 +42,7 @@ public class KeranjangControllerTest {
 
         doReturn(keranjang).when(keranjangService).createKeranjang(any(Keranjang.class));
 
-        MvcResult mvcResult = mockMvc.perform(post("/keranjang"))
+        MvcResult mvcResult = mockMvc.perform(post("/api/keranjang"))
                 .andExpect(status().isOk())
                 .andReturn();
 
