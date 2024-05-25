@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/review")
@@ -35,10 +36,10 @@ public class ReviewController {
     public ResponseEntity<?> createReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
-            ReviewCommand createReview = new CreateReviewCommand(review, reviewRepository);
-            reviewService.executeCommand(createReview);
+            ReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
+            Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
 
-            res.put("review", createReview);
+            res.put("review", createdReview);
             res.put("message", "Review Created Successfully");
             return ResponseEntity.status(HttpStatus.CREATED).body(res);
         }catch (Exception e){
