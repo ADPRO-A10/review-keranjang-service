@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.service;
 
+import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
+import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItemKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +11,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,56 +27,54 @@ public class StockHandlerTest {
     Handler handler;
     @Mock
     RestTemplate restTemplate;
+    List<CartItem> cartItems = new ArrayList<>();
 
     @BeforeEach
     void setupUp() {
-
         stockHandler = new StockHandler(restTemplate);
         stockHandler.setNext(handler);
 
-        Map<String, Object> produkToko1 = new HashMap<>();
-        produkToko1.put("id", 1);
-        produkToko1.put("stok", 10);
-        Map<String, Object> produkToko2 = new HashMap<>();
-        produkToko2.put("id", 2);
-        produkToko2.put("stok", 20);
+        CartItemKey cartItemKey1 = new CartItemKey();
+        cartItemKey1.setItemId(UUID.fromString("0a1b2c3d-4e5f-6789-0abc-def123456789"));
+        CartItem cartItem1 = new CartItem();
+        cartItem1.setId(cartItemKey1);
+        cartItem1.setJumlah(10);
 
+        CartItemKey cartItemKey2 = new CartItemKey();
+        cartItemKey2.setItemId(UUID.fromString("4f12c7e3-89a6-42d7-b0f7-2d9c9e5f89fa"));
+        CartItem cartItem2 = new CartItem();
+        cartItem2.setId(cartItemKey2);
+        cartItem2.setJumlah(20);
 
-        when(restTemplate.getForObject(endsWith("1"), eq(String.class)))
-                .thenReturn("{\"stokTersedia\": " + produkToko1.get("stok") + "}");
-        when(restTemplate.getForObject(endsWith("2"), eq(String.class)))
-                .thenReturn("{\"stokTersedia\": " + produkToko2.get("stok") + "}");
+        when(restTemplate.getForObject(endsWith("9"), eq(String.class)))
+                .thenReturn("{\"stokTersedia\": " + 10 + "}");
+        lenient().when(restTemplate.getForObject(endsWith("a"), eq(String.class)))
+                .thenReturn("{\"stokTersedia\": " + 20 + "}");
+
+        cartItems.add(cartItem1);
+        cartItems.add(cartItem2);
     }
 
     @Test
     void testStockTiapProdukDiKeranjangTersedia() {
-        Map<String, Object> keranjang = new HashMap<>();
-        keranjang.put("1", 8);
-        keranjang.put("2", 15);
-
-        stockHandler.handleRequest(keranjang);
+        stockHandler.handleRequest(cartItems);
         assertEquals("PASSED", stockHandler.getStatus());
     }
 
     @Test
     void testStockAdaProdukYangStockTidakTersedia() {
-        Map<String, Object> keranjang = new HashMap<>();
-        keranjang.put("1", 8);
-        keranjang.put("2", 30);
+        cartItems.getFirst().setJumlah(15);
 
-        assertThrows(IllegalArgumentException.class, () -> stockHandler.handleRequest(keranjang));
+        assertThrows(IllegalArgumentException.class, () -> stockHandler.handleRequest(cartItems));
         assertEquals("FAILED", stockHandler.getStatus());
     }
 
     @Test
     void testNextHandleInvokedWhenPassed() {
-        Map<String, Object> keranjang = new HashMap<>();
-        keranjang.put("1", 8);
-        keranjang.put("2", 15);
 
-        stockHandler.handleRequest(keranjang);
+        stockHandler.handleRequest(cartItems);
         assertEquals("PASSED", stockHandler.getStatus());
-        verify(handler).handleRequest(keranjang);
+        verify(handler).handleRequest(cartItems);
 
     }
 }

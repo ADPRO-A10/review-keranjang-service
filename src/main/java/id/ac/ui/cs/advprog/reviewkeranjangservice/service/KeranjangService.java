@@ -7,4 +7,5 @@ import java.util.UUID;
 public interface KeranjangService {
     public Keranjang createKeranjang(Keranjang keranjang);
     public Keranjang findById(UUID keranjangId);
+    public void checkOut(UUID keranjangId);
 }

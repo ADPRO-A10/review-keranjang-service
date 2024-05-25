@@ -1,9 +1,5 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
-import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItemKey;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Keranjang;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,33 +25,10 @@ public class KeranjangRepositoryTest {
 
         Keranjang keranjang1 = new Keranjang();
         keranjangRepository.save(keranjang1);
-        CartItem cartItem1 = new CartItem();
-        CartItem cartItem2 = new CartItem();
-        CartItemKey cartItemKey1 = new CartItemKey();
-        CartItemKey cartItemKey2 = new CartItemKey();
-
-        Map<String, Object> produk1 = new HashMap<>();
-        produk1.put("nama", "ak-47");
-        produk1.put("id", "1e8aee36-8c0b-47a7-8248-bdc067b18d6d");
-        produk1.put("harga", 100000);
-        produk1.put("jumlah", 1);
-
-        cartItemKey1.setItemId(UUID.fromString("1e8aee36-8c0b-47a7-8248-bdc067b18d6d"));
-        cartItemKey1.setCartId(keranjang1.getId());
-        cartItem1.setId(cartItemKey1);
 
         Keranjang keranjang2 = new Keranjang();
         keranjangRepository.save(keranjang2);
 
-        Map<String, Object> produk2 = new HashMap<>();
-        produk2.put("nama", "m4a1");
-        produk2.put("id", "c9e5eacd-56b8-4e2c-b528-75481e8b50c8");
-        produk2.put("harga", 200000);
-        produk2.put("jumlah", 2);
-
-        cartItemKey2.setItemId(UUID.fromString("c9e5eacd-56b8-4e2c-b528-75481e8b50c8"));
-        cartItemKey2.setCartId(keranjang2.getId());
-        cartItem1.setId(cartItemKey2);
 
         keranjangList.add(keranjang1);
         keranjangList.add(keranjang2);

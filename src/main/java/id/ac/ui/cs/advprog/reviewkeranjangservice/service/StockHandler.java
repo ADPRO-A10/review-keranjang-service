@@ -1,9 +1,11 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.service;
 
+import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class StockHandler extends BaseHandler{
     private final RestTemplate restTemplate;
@@ -13,10 +15,11 @@ public class StockHandler extends BaseHandler{
     }
 
     @Override
-    public void handleRequest(Map<String, Object> request) {
-        for (String key : request.keySet()) {
-            int stockKeranjang = (int) request.get(key);
-            int stockPenjual = getStock(key);
+    public void handleRequest(Iterable<CartItem> cartItems) {
+        for (CartItem item : cartItems) {
+            int stockKeranjang = item.getJumlah();
+            UUID idItem = item.getId().getItemId();
+            int stockPenjual = getStock(idItem.toString());
 
             if (stockKeranjang > stockPenjual) {
                 this.setStatus("FAILED");
@@ -26,7 +29,7 @@ public class StockHandler extends BaseHandler{
 
         this.setStatus("PASSED");
         if (this.getNextHandler() != null) {
-            this.getNextHandler().handleRequest(request);
+            this.getNextHandler().handleRequest(cartItems);
         }
 
     }

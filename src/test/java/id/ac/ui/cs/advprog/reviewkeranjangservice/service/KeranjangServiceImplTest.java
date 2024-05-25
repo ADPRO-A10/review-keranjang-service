@@ -1,6 +1,4 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.service;
-import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
-import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItemKey;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Keranjang;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.KeranjangRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,34 +27,10 @@ public class KeranjangServiceImplTest {
         this.keranjangList = new ArrayList<>();
 
         Keranjang keranjang1 = new Keranjang();
-        CartItem cartItem1 = new CartItem();
-        CartItem cartItem2 = new CartItem();
         keranjang1.setId(UUID.randomUUID());
-        CartItemKey cartItemKey1 = new CartItemKey();
-        CartItemKey cartItemKey2 = new CartItemKey();
-
-        Map<String, Object> produk1 = new HashMap<>();
-        produk1.put("nama", "ak-47");
-        produk1.put("id", "1e8aee36-8c0b-47a7-8248-bdc067b18d6d");
-        produk1.put("harga", 100000);
-        produk1.put("jumlah", 1);
-
-        cartItemKey1.setItemId(UUID.fromString("1e8aee36-8c0b-47a7-8248-bdc067b18d6d"));
-        cartItemKey1.setCartId(keranjang1.getId());
-        cartItem1.setId(cartItemKey1);
 
         Keranjang keranjang2 = new Keranjang();
         keranjang2.setId(UUID.randomUUID());
-
-        Map<String, Object> produk2 = new HashMap<>();
-        produk2.put("nama", "m4a1");
-        produk2.put("id", "c9e5eacd-56b8-4e2c-b528-75481e8b50c8");
-        produk2.put("harga", 200000);
-        produk2.put("jumlah", 2);
-
-        cartItemKey2.setItemId(UUID.fromString("c9e5eacd-56b8-4e2c-b528-75481e8b50c8"));
-        cartItemKey2.setCartId(keranjang2.getId());
-        cartItem1.setId(cartItemKey2);
 
         keranjangList.add(keranjang1);
         keranjangList.add(keranjang2);
@@ -64,7 +38,7 @@ public class KeranjangServiceImplTest {
 
     @Test
     void testCreateKeranjang() {
-        Keranjang keranjang1 = keranjangList.get(0);
+        Keranjang keranjang1 = keranjangList.getFirst();
         doReturn(keranjang1).when(keranjangRepository).save(keranjang1);
 
         Keranjang result = keranjangService.createKeranjang(keranjang1);
@@ -74,7 +48,7 @@ public class KeranjangServiceImplTest {
 
     @Test
     void testCreateKeranjangIfAlreadyExists() {
-        Keranjang keranjang1 = keranjangList.get(0);
+        Keranjang keranjang1 = keranjangList.getFirst();
         doReturn(Optional.of(keranjang1)).when(keranjangRepository).findById(keranjang1.getId());
 
         assertNull(keranjangService.createKeranjang(keranjang1));

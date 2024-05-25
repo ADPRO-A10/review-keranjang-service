@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.service;
 
+import id.ac.ui.cs.advprog.reviewkeranjangservice.model.CartItem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,6 @@ public abstract class BaseHandler implements Handler{
     }
 
     @Override
-    public abstract void handleRequest(Map<String, Object> request);
+    public abstract void handleRequest(Iterable<CartItem> cartItems);
 
 }

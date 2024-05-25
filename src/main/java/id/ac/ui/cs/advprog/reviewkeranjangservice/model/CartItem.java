@@ -13,4 +13,5 @@ public class CartItem {
     CartItemKey id;
     private int jumlah;
     private int harga;
+    private String nama;
 }

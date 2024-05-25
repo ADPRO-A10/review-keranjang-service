@@ -1,8 +1,5 @@
 package id.ac.ui.cs.advprog.reviewkeranjangservice.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,21 +26,9 @@ public class KeranjangTest {
         CartItemKey cartItemKey1 = new CartItemKey();
         CartItemKey cartItemKey2 = new CartItemKey();
 
-        Map<String, Object> produk1 = new HashMap<>();
-        produk1.put("nama", "ak-47");
-        produk1.put("id", "1e8aee36-8c0b-47a7-8248-bdc067b18d6d");
-        produk1.put("harga", 100000);
-        produk1.put("jumlah", 1);
-
         cartItemKey1.setItemId(UUID.fromString("1e8aee36-8c0b-47a7-8248-bdc067b18d6d"));
         cartItemKey1.setCartId(keranjang.getId());
         cartItem1.setId(cartItemKey1);
-
-        Map<String, Object> produk2 = new HashMap<>();
-        produk2.put("nama", "m4a1");
-        produk2.put("id", "c9e5eacd-56b8-4e2c-b528-75481e8b50c8");
-        produk2.put("harga", 200000);
-        produk2.put("jumlah", 2);
 
         cartItemKey2.setItemId(UUID.fromString("c9e5eacd-56b8-4e2c-b528-75481e8b50c8"));
         cartItemKey2.setCartId(keranjang.getId());
@@ -57,8 +42,9 @@ public class KeranjangTest {
     }
 
     @Test
+    @SuppressWarnings("unused")
     void testGetId() {
-        Keranjang keranjang = listKeranjang.get(0);
+        Keranjang keranjang = listKeranjang.getFirst();
         try {
             UUID uuid = UUID.fromString(keranjang.getId().toString());
             assertTrue(true);
@@ -68,8 +54,8 @@ public class KeranjangTest {
     }
 
     @Test
-    void testGetKeranjangFromCartItem() throws JsonProcessingException {
-        Keranjang keranjang = listKeranjang.get(0);
+    void testGetKeranjangFromCartItem() {
+        Keranjang keranjang = listKeranjang.getFirst();
 
         UUID idKeranjang1 = listCartItem.get(0).getId().getCartId();
         UUID idKeranjang2 = listCartItem.get(1).getId().getCartId();
