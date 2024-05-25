@@ -18,7 +18,7 @@ public class DeleteReviewCommand implements ReviewCommand {
     @Override
     public Optional<Review> execute() {
         Optional<Review> review = reviewRepository.findById(reviewId);
-        review.ifPresent(value -> reviewRepository.deleteById(String.valueOf(value)));
+        review.ifPresent(value -> reviewRepository.deleteById(value.getReviewId()));
         return review;
     }
 }
