@@ -33,141 +33,141 @@ public class ReviewController {
     @Autowired
     private ReviewRepository reviewRepository;
 
-//    @GetMapping("/createReview")
-//    public String CreateReviewPage(Model model) {
-//        model.addAttribute("review", new Review());
-//        model.addAttribute("products", productService.getAllProducts());
-//        return "createReview";
-//    }
-//
-//    @PostMapping("/createReview")
-//    public String createReviewPost(@ModelAttribute Review review, Model model) {
-//        try {
-//            ReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
-//            Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
-//
-//            model.addAttribute("review", new Review()); // Reset the form
-//            return "redirect:list"; // Redirect to the form page after successful submission
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
-//            return "createReview"; // Return to the form page with error message
-//        }
-//    }
+    @GetMapping("/createReview")
+    public String CreateReviewPage(Model model) {
+        model.addAttribute("review", new Review());
+        model.addAttribute("products", productService.getAllProducts());
+        return "createReview";
+    }
 
     @PostMapping("/createReview")
-    public ResponseEntity<?> createReview(@RequestBody Review review){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    public String createReviewPost(@ModelAttribute Review review, Model model) {
+        try {
             ReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
             Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
 
-            res.put("review", createdReview);
-            res.put("message", "Review Created Successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).body(res);
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+            model.addAttribute("review", new Review()); // Reset the form
+            return "redirect:list"; // Redirect to the form page after successful submission
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "createReview"; // Return to the form page with error message
         }
     }
 
-//    @GetMapping("/delete/{reviewId}")
-//    public String deleteReview(@PathVariable("reviewId") String id, Model model) {
-//        try {
-//            ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
-//            reviewService.executeCommand(deletedReview);
+//    @PostMapping("/createReview")
+//    public ResponseEntity<?> createReview(@RequestBody Review review){
+//        Map<String, Object> res = new HashMap<>();
+//        try{
+//            ReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
+//            Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
 //
-//            return "redirect:/review/list"; // Redirect to the review list page
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
-//            return "reviewList"; // Return to the list page with error message
+//            res.put("review", createdReview);
+//            res.put("message", "Review Created Successfully");
+//            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//        }catch (Exception e){
+//            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//            res.put("error", e.getMessage());
+//            res.put("message", "Something Wrong With Server");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
 //        }
 //    }
 
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") String id){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    @GetMapping("/delete/{reviewId}")
+    public String deleteReview(@PathVariable("reviewId") String id, Model model) {
+        try {
             ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
             reviewService.executeCommand(deletedReview);
 
-            res.put("code", HttpStatus.OK.value());
-            res.put("message", "Review Deleted Successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+            return "redirect:/review/list"; // Redirect to the review list page
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "reviewList"; // Return to the list page with error message
         }
     }
 
-//    @GetMapping("/editReview/{reviewId}")
-//    public String editReviewPage(@PathVariable("reviewId") String id, Model model) {
-//        Optional<Review> review = reviewRepository.findById(id);
-//        if (review.isPresent()) {
-//            model.addAttribute("review", review.get());
-//            model.addAttribute("products", productService.getAllProducts());
-//            return "editReview";
-//        } else {
-//            model.addAttribute("errorMessage", "Review not found");
-//            return "redirect:/review/list";
-//        }
-//    }
+//    @DeleteMapping("/delete/{reviewId}")
+//    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") String id){
+//        Map<String, Object> res = new HashMap<>();
+//        try{
+//            ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
+//            reviewService.executeCommand(deletedReview);
 //
-//    @PostMapping("/editReview/{reviewId}")
-//    public String editReview(@PathVariable("reviewId") String id, @ModelAttribute Review review, Model model) {
-//        try {
-//            ReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, review);
-//            Optional<Review> editedReview = reviewService.executeCommand(editReviewCommand);
-//
-//            if (editedReview.isPresent()) {
-//                return "redirect:/review/list"; // Redirect to the review list page after successful edit
-//            } else {
-//                model.addAttribute("errorMessage", "Review not found");
-//                return "reviewEdit"; // Return to the edit page with error message
-//            }
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
-//            return "reviewEdit"; // Return to the edit page with error message
+//            res.put("code", HttpStatus.OK.value());
+//            res.put("message", "Review Deleted Successfully");
+//            return ResponseEntity.status(HttpStatus.OK).body(res);
+//        }catch (Exception e){
+//            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//            res.put("error", e.getMessage());
+//            res.put("message", "Something Wrong With Server");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
 //        }
 //    }
 
-    @PostMapping("/editReview")
-    public ResponseEntity<?> editReview(@RequestBody Review review){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    @GetMapping("/editReview/{reviewId}")
+    public String editReviewPage(@PathVariable("reviewId") String id, Model model) {
+        Optional<Review> review = reviewRepository.findById(id);
+        if (review.isPresent()) {
+            model.addAttribute("review", review.get());
+            model.addAttribute("products", productService.getAllProducts());
+            return "editReview";
+        } else {
+            model.addAttribute("errorMessage", "Review not found");
+            return "redirect:/review/list";
+        }
+    }
+
+    @PostMapping("/editReview/{reviewId}")
+    public String editReview(@PathVariable("reviewId") String id, @ModelAttribute Review review, Model model) {
+        try {
             ReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, review);
             Optional<Review> editedReview = reviewService.executeCommand(editReviewCommand);
 
             if (editedReview.isPresent()) {
-                res.put("listing", editedReview.get());
-                res.put("message", "Review ID " + review.getReviewId() +" updated Successfully");
-                return ResponseEntity.status(HttpStatus.CREATED).body(res);
+                return "redirect:/review/list"; // Redirect to the review list page after successful edit
             } else {
-                res.put("code", HttpStatus.NOT_FOUND.value());
-                res.put("message", "Review not found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+                model.addAttribute("errorMessage", "Review not found");
+                return "reviewEdit"; // Return to the edit page with error message
             }
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "reviewEdit"; // Return to the edit page with error message
         }
     }
 
-//    @GetMapping("/list")
-//    public String listReviews(Model model) {
-//        try {
-//            List<Review> reviews = reviewService.findAll();
-//            model.addAttribute("reviews", reviews);
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+//    @PostMapping("/editReview")
+//    public ResponseEntity<?> editReview(@RequestBody Review review){
+//        Map<String, Object> res = new HashMap<>();
+//        try{
+//            ReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, review);
+//            Optional<Review> editedReview = reviewService.executeCommand(editReviewCommand);
+//
+//            if (editedReview.isPresent()) {
+//                res.put("listing", editedReview.get());
+//                res.put("message", "Review ID " + review.getReviewId() +" updated Successfully");
+//                return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//            } else {
+//                res.put("code", HttpStatus.NOT_FOUND.value());
+//                res.put("message", "Review not found");
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+//            }
+//        }catch (Exception e){
+//            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
+//            res.put("error", e.getMessage());
+//            res.put("message", "Something Wrong With Server");
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
 //        }
-//        return "reviewList";
 //    }
+
+    @GetMapping("/list")
+    public String listReviews(Model model) {
+        try {
+            List<Review> reviews = reviewService.findAll();
+            model.addAttribute("reviews", reviews);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+        }
+        return "reviewList";
+    }
 
     @GetMapping("/findAllReviews")
     public ResponseEntity<?> findAllReviews(){
