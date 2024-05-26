@@ -21,7 +21,9 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final RestTemplate restTemplate;
 
-    public ReviewServiceImpl(RestTemplateBuilder restTemplateBuilder) {
+    @Autowired
+    public ReviewServiceImpl(ReviewRepository reviewRepository, RestTemplateBuilder restTemplateBuilder) {
+        this.reviewRepository = reviewRepository;
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -33,13 +35,5 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<Review> findAll() {
         return (List<Review>) reviewRepository.findAll();
-    }
-
-    @Override
-    public Review getReviewByProduct(String productId) {
-        String productApi = "http://34.143.169.251";
-        String url = productApi + "/reviews/" + productId;
-        ResponseEntity<Review> response = restTemplate.getForEntity(url, Review.class);
-        return response.getBody();
     }
 }

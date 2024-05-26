@@ -9,6 +9,4 @@ import java.util.Optional;
 public interface ReviewService {
     Optional<Review> executeCommand(ReviewCommand command);
     List<Review> findAll();
-
-    Review getReviewByProduct(String productId);
 }
