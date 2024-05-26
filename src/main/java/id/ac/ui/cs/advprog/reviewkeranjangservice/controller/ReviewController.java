@@ -10,6 +10,8 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/review")
 public class ReviewController {
 
@@ -27,26 +29,23 @@ public class ReviewController {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    @GetMapping
-    public String renderReviewPage() {
-        return "Hello World Review!!";
+    @GetMapping("/createReview")
+    public String CreateReviewPage(Model model) {
+        model.addAttribute("review", new Review());
+        return "createReview";
     }
 
-    @PostMapping
-    public ResponseEntity<?> createReview(@RequestBody Review review){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    @PostMapping("/createReview")
+    public String createReviewPost(@ModelAttribute Review review, Model model) {
+        try {
             ReviewCommand createReviewCommand = new CreateReviewCommand(review, reviewRepository);
             Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
 
-            res.put("review", createdReview);
-            res.put("message", "Review Created Successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).body(res);
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+            model.addAttribute("review", new Review()); // Reset the form
+            return "redirect:reviewList"; // Redirect to the form page after successful submission
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "createReview"; // Return to the form page with error message
         }
     }
 
@@ -68,7 +67,7 @@ public class ReviewController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/editReview")
     public ResponseEntity<?> editReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
@@ -90,6 +89,17 @@ public class ReviewController {
             res.put("message", "Something Wrong With Server");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
         }
+    }
+
+    @GetMapping("/list")
+    public String listReviews(Model model) {
+        try {
+            List<Review> reviews = reviewService.findAll();
+            model.addAttribute("reviews", reviews);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+        }
+        return "reviewList";
     }
 
     @GetMapping("/findAllReviews")
