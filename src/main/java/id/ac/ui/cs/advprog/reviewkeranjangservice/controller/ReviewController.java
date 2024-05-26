@@ -67,27 +67,34 @@ public class ReviewController {
         }
     }
 
-    @PutMapping("/editReview")
-    public ResponseEntity<?> editReview(@RequestBody Review review){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    @GetMapping("/editReview/{reviewId}")
+    public String editReviewPage(@PathVariable("reviewId") String id, Model model) {
+        Optional<Review> review = reviewRepository.findById(id);
+        if (review.isPresent()) {
+            model.addAttribute("review", review.get());
+            model.addAttribute("products", productService.getAllProducts());
+            return "editReview";
+        } else {
+            model.addAttribute("errorMessage", "Review not found");
+            return "redirect:/review/list";
+        }
+    }
+
+    @PostMapping("/editReview/{reviewId}")
+    public String editReview(@PathVariable("reviewId") String id, @ModelAttribute Review review, Model model) {
+        try {
             ReviewCommand editReviewCommand = new EditReviewCommand(reviewRepository, review);
             Optional<Review> editedReview = reviewService.executeCommand(editReviewCommand);
 
             if (editedReview.isPresent()) {
-                res.put("listing", editedReview.get());
-                res.put("message", "Review ID " + review.getReviewId() +" updated Successfully");
-                return ResponseEntity.status(HttpStatus.CREATED).body(res);
+                return "redirect:/review/list"; // Redirect to the review list page after successful edit
             } else {
-                res.put("code", HttpStatus.NOT_FOUND.value());
-                res.put("message", "Review not found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+                model.addAttribute("errorMessage", "Review not found");
+                return "reviewEdit"; // Return to the edit page with error message
             }
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "reviewEdit"; // Return to the edit page with error message
         }
     }
 
