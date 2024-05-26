@@ -54,21 +54,16 @@ public class ReviewController {
         }
     }
 
-    @DeleteMapping("/{reviewId}")
-    public ResponseEntity<?> deleteReview(@PathVariable("reviewId") String id){
-        Map<String, Object> res = new HashMap<>();
-        try{
+    @GetMapping("/delete/{reviewId}")
+    public String deleteReview(@PathVariable("reviewId") String id, Model model) {
+        try {
             ReviewCommand deletedReview = new DeleteReviewCommand(id, reviewRepository);
             reviewService.executeCommand(deletedReview);
 
-            res.put("code", HttpStatus.OK.value());
-            res.put("message", "Review Deleted Successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(res);
-        }catch (Exception e){
-            res.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            res.put("error", e.getMessage());
-            res.put("message", "Something Wrong With Server");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+            return "redirect:/review/list"; // Redirect to the review list page
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
+            return "reviewList"; // Return to the list page with error message
         }
     }
 
