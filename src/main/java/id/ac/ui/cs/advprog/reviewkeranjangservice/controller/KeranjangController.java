@@ -17,11 +17,6 @@ public class KeranjangController {
     @Autowired
     KeranjangService keranjangService;
 
-    @GetMapping("/keranjang")
-    public String renderKeranjangPage() {
-        return "Hello World Keranjang!!";
-    }
-
     @PostMapping("api/keranjang")
     public ResponseEntity<Keranjang> createKeranjang() {
         Keranjang keranjang = new Keranjang();
