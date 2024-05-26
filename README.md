@@ -15,4 +15,12 @@ Dwiky Ahmad Megananta - 2206829206
 
 ## Code Diagram
 ![Code Diagram](<assets/img/Adpro TK Class Diagram-CodeDiagram Review.drawio.png>)
->>>>>>> 0a26d74a0ac2ef2a50d6ffcf116cb656b4955b63
+
+# Bukti Profiling - Keranjang Service
+Dwiky Ahmad Megananta - 2206829206
+
+![Profiling_1](/img/Profiling_1.png)
+
+![Profiling_2](/img/Profiling_2.png)
+
+![Profiling_3](/img/Profiling_3.png)
