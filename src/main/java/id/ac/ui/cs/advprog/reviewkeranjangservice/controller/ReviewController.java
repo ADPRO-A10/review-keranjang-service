@@ -6,6 +6,7 @@ import id.ac.ui.cs.advprog.reviewkeranjangservice.command.EditReviewCommand;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.command.ReviewCommand;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.model.Review;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.repository.ReviewRepository;
+import id.ac.ui.cs.advprog.reviewkeranjangservice.service.ProductService;
 import id.ac.ui.cs.advprog.reviewkeranjangservice.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,15 @@ public class ReviewController {
     ReviewService reviewService;
 
     @Autowired
+    ProductService productService;
+
+    @Autowired
     private ReviewRepository reviewRepository;
 
     @GetMapping("/createReview")
     public String CreateReviewPage(Model model) {
         model.addAttribute("review", new Review());
+        model.addAttribute("products", productService.getAllProducts());
         return "createReview";
     }
 
@@ -42,7 +47,7 @@ public class ReviewController {
             Optional<Review> createdReview = reviewService.executeCommand(createReviewCommand);
 
             model.addAttribute("review", new Review()); // Reset the form
-            return "redirect:reviewList"; // Redirect to the form page after successful submission
+            return "redirect:list"; // Redirect to the form page after successful submission
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Something went wrong: " + e.getMessage());
             return "createReview"; // Return to the form page with error message

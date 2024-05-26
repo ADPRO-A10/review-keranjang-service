@@ -11,10 +11,11 @@
     <h3>Create New Review</h3>
 
     <form th:action="@{/review/createReview}" th:object="${review}" method="post">
-        <div class="form-group">
-            <label for="productInput">Product</label>
-            <input th:field="*{product}" type="text" class="form-control mb-4 col-4" id="productInput" placeholder="Enter product">
-        </div>
+        <label for="productInput">Product</label>
+        <select th:field="*{product}" class="form-control mb-4 col-4" id="productInput">
+            <option value="">-- Select Product --</option>
+            <option th:each="product : ${products}" th:value="${product.productId}" th:text="${product.productName}"></option>
+        </select>
         <div class="form-group">
             <label for="reviewerNameInput">Reviewer Name</label>
             <input th:field="*{reviewerName}" type="text" class="form-control mb-4 col-4" id="reviewerNameInput" placeholder="Enter your name">
