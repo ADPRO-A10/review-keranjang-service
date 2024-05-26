@@ -21,16 +21,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceImplTest {
 
-    @InjectMocks
-    ReviewServiceImpl reviewService;
-
     @Mock
-    ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
+
+    @InjectMocks
+    private ReviewServiceImpl reviewService;
 
     @Mock
     private RestTemplateBuilder restTemplateBuilder;
@@ -40,12 +41,43 @@ class ReviewServiceImplTest {
 
     private Product product;
 
+    @Mock
+    ReviewCommand reviewCommand;
+
     @BeforeEach
     void setUp() {
-        when(restTemplateBuilder.build()).thenReturn(restTemplate);
         product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         product.setProductName("Lethal Company");
         product.setProductQuantity(5);
+
+        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+        reviewService = new ReviewServiceImpl(reviewRepository, restTemplateBuilder);
     }
+
+    @Test
+    void testExecuteCommand() {
+        Review review = new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4);
+        Mockito.when(reviewCommand.execute()).thenReturn(Optional.of(review));
+
+        Optional<Review> result = reviewService.executeCommand(reviewCommand);
+
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void testFindAll() {
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(product, "Yanto Laba-laba sunda", "Keren banget kang aduhai", 4));
+        reviews.add(new Review(product, "Yanto Laba-laba jawa", "Keren banget kang aduhai", 3));
+
+        Mockito.when(reviewRepository.findAll()).thenReturn(reviews);
+
+        List<Review> result = reviewService.findAll();
+
+        assertEquals(2, result.size());
+    }
+
+
+
 }
