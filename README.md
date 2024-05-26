@@ -24,3 +24,12 @@ Dwiky Ahmad Megananta - 2206829206
 ![Profiling_2](/img/Profiling_2.png)
 
 ![Profiling_3](/img/Profiling_3.png)
+
+# Bukti Profiling - Review Service
+> Fadrian Yhoga Pratama - 2206819395
+
+![Flame Graph.jpg](assets%2Fimg%2FFlame%20Graph.jpg)
+
+![findAll.jpg](assets%2Fimg%2FfindAll.jpg)
+
+![After optimization.jpg](assets%2Fimg%2FAfter%20optimization.jpg)

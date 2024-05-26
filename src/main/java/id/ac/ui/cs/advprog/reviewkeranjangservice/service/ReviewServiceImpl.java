@@ -32,10 +32,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<Review> findAll() {
-        Iterable<Review> productIterator = reviewRepository.findAll();
-        List<Review> allProduct = new ArrayList<>();
-        productIterator.forEach(allProduct::add);
-        return allProduct;
+        return (List<Review>) reviewRepository.findAll();
     }
 
     @Override
