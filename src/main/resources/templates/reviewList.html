@@ -8,9 +8,34 @@
         .card-review {
             margin-bottom: 20px;
             width: 100%;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .card-review:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .rating {
             color: #f39c12;
+            font-size: 24px;
+        }
+        .rating span {
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .rating span:hover,
+        .rating span:hover ~ span {
+            color: #f39c12;
+        }
+        .btn-edit,
+        .btn-delete {
+            transition: all 0.3s ease;
+        }
+        .btn-edit:hover,
+        .btn-delete:hover {
+            transform: translateY(-3px);
         }
     </style>
 </head>
@@ -27,13 +52,13 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${review.reviewerName}"></h5>
                         <h6 class="card-subtitle mb-2 text-muted" th:text="${review.product.productName}"></h6>
-                        <p class="card-text" th:text="${review.reviewText}"></p>
                         <p class="rating">
                             <span th:each="star : ${#numbers.sequence(1, review.rating)}">&#9733;</span>
                             <span th:each="star : ${#numbers.sequence(review.rating + 1, 5)}" th:if="${review.rating < 5}">&#9734;</span>
                         </p>
-                        <a th:href="@{/review/editReview/{reviewId}(reviewId=${review.reviewId})}" class="btn btn-primary">Edit</a>
-                        <a th:href="@{/review/delete/{id}(id=${review.reviewId})}" class="btn btn-danger">Delete</a>
+                        <p class="card-text" th:text="${review.reviewText}"></p>
+                        <a th:href="@{/review/editReview/{reviewId}(reviewId=${review.reviewId})}" class="btn btn-primary btn-edit">Edit</a>
+                        <a th:href="@{/review/delete/{id}(id=${review.reviewId})}" class="btn btn-danger btn-delete">Delete</a>
                     </div>
                 </div>
             </div>
