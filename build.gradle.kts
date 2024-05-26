@@ -45,6 +45,8 @@ dependencies {
     implementation("org.postgresql:postgresql")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.yaml:snakeyaml:1.28")
+    implementation("com.github.javafaker:javafaker:1.0.2")
 }
 
 tasks.withType<Test> {
