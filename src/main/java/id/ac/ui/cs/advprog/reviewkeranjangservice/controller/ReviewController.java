@@ -134,7 +134,7 @@ public class ReviewController {
 //        }
 //    }
 
-    @PostMapping("/editReview/{reviewId}")
+    @PostMapping("/editReview")
     public ResponseEntity<?> editReview(@RequestBody Review review){
         Map<String, Object> res = new HashMap<>();
         try{
